@@ -1,0 +1,23 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.de.steffensky:latex-gradle-plugin:0.2.1"
+    }
+}
+
+apply plugin: "de.steffensky.latex"
+
+group 'at.ac.uibk.cl-informatik'
+version '1.0-SNAPSHOT'
+
+latex {
+//    pdflatex = '/home/david/opt/texlive/2016/bin/x86_64-linux/pdflatex'
+    documentBase = 'thesis'
+    jobname = 'latex'
+    pdflatexargs = []
+    cookDir = 'out'
+}
