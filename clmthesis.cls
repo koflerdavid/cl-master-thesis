@@ -118,7 +118,7 @@ chapter%
 \newtheorem{definition}[corollary]{Definition}
 \newtheorem{example}[corollary]{\examplename}
 \newtheorem{exercise}[corollary]{\exercisename}
-\newcommand\@bibfile{biblio}
+\newcommand\@bibfile{../biblio}
 \newcommand\bibfile[1]{\renewcommand\@bibfile{#1}}
 \newcommand*\@supervisor{insert the name of your supervisor}
 \global\let\@supervisors\@empty
