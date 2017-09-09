@@ -1,60 +1,62 @@
-\section{Automata theory}
+\section{Automata Theory}
 
-Automata theory concerns the study of abstract automata and computational models.
-The aim is to study their essential properties and which types of computational problems can be solved bz using them.
+Automata theory is concerned with the study of abstract automata and computational models.
+The aim is to study their essential properties and which types of computational problems can be solved by using them.
 
-\subsection{Basic definitions}
+\subsection{Basic Definitions}
 
 \begin{definition}
     The set of all finite sequences of an alphabet $\Sigma$ is written as $\Sigma^\ast$.
     It is formally defned as
-    $\Sigma^\ast = \cup_{i=0}^{\inf} \{c_1 c_2 \ldots c_i | \forall 1 \le i \le n: c_i \in \Sigma \} $
+    $\Sigma^\ast = \cup_{i=0}^{\inf} \{c_1 c_2 \ldots c_i \mid \forall 1 \le i \le n: c_i \in \Sigma \} $
     A language is a subset of $\Sigma^\ast$.
 \end{definition}
 
-The empty sequence (containing no symbols at a all) is represented by $\epsilon$.
+The empty sequence (containing no symbols at a all) is denoted by $\epsilon$.
 
-\subsection{Deterministic finite automata}
+\subsection{Deterministic Finite Automata}
+
+Deterministic finite automata (DFAs) can be thought of as graphs with labeled vertices and edges.
 
 \begin{definition}
-    Deterministic finite automata (DFAs) can be thought of as graphs with labeled vertices and edges.
     A DFA can be defined using the following five components:
 
     \begin{itemize}
-        \item its set of vertices $Q_D$, called states. As implied by the term DFA, this set has to be finite.
-        \item a set of labels $\Sigma_D$ on the vertices which is called the alphabet of input symbols.
+        \item A set of vertices $Q_D$, called states.
+        As implied by the term DFA, this set has to be finite.
+        \item A set of labels $\Sigma_D$ on the vertices which is called the alphabet of input symbols.
         It has to be finite as well.
-        \item an ``initial'' state $s_D \in Q_D$.
-        \item a number of states $F_D \subseteq Q_D$ called accepting states.
-        \item the set of directed edges called transitions.
+        \item An ``initial'' state $s_D \in Q_D$.
+        \item A number of states $F_D \subseteq Q_D$ called accepting states.
+        \item A set of directed edges called transitions.
         Each transition is labelled with one input symbol.
-        There is exactly one transition between each and every state.
-        Because of this, this set is usually represented by a total function $\delta_D : (Q_D, \Sigma) \rightarrow Q_D$ which
-        associates a destination state to every pair of state and input symbol.
+        Furthermore, for each input symbol there is exactly one transition labelled with
+        the symbol between each pair of states.
+        Because of this, this set can be represented by a total function
+        $\delta_D : Q_D \times \Sigma_N \rightarrow Q_D$ which associates a successor state to
+        every pair of state and input symbol.
     \end{itemize}
 \end{definition}
 
 DFAs are chiefly used to represent transition systems.
-A system modeled by the automata is thought of always being in one of the states contained in the automata.
+A system modeled by the automaton is thought as always being in one of the states contained in the automata.
 When the system receives an input, a transition to another state is possible.
 
 For certain classes of languages, a DFA can be used to decide whether a specific word $w$ is contained in a language $L$.
-This is done by first constructing an appropriate automata $M_L$ for the language.
-Then, the transition system is initialized to be at the initial state $s_{M_L}$.
+This is done by first constructing an appropriate automaton $M$ for the language.
+Then, the transition system is initialized to be at the initial state $s_{M}$.
 Then, the word $w$ is treated as a sequence of input symbols $c_1 c_2 \ldots c_n$.
-For each input symbol, the state transition $\delta_{M_L}(q, c)$ matching the current state $q$ and input symbol $c$ is followed.
+For each input symbol, the state transition $\delta_{M}(q, c)$ matching the current state $q$ and input symbol $c$ is followed.
 If the system reaches one of the accepting states and there are no more input symbols left, then the
-automata is said to accept the input.
-For this to prove that $w \in L$, it is necessary that reaching an accepting state of $M_L$ using $w$ is equivalent to membership of $w$ in $L$.
-A proof of the algorithm used to derive $M_L$ is required to ensure this.
+automaton is said to accept the input.
 
 The following lines formally describe this procedure:
 \begin{align}
-    w \in L \Leftrightarrow \hat\delta_{M_L}(s_{M_L}, w) \in F_{M_L} \\
+    w \in L \Leftrightarrow \hat\delta_{M_L}(s_{M_L}, w) \in F_{M_L}
 \end{align}
 
 \begin{definition}
-    $\hat\delta$ is the transition function of the automaton $M_L$, extended to words.
+    $\hat\delta$ is the transition function of the automaton $M$, extended to words.
     This is done by using induction over the length of the input word.
     \begin{align}
         \hat\delta_M(q, \epsilon) &= q\\
@@ -67,25 +69,25 @@ The following lines formally describe this procedure:
     The language accepted by the initial state of an automata $M$ is the language of $M$.
 
     \begin{align}
-        \mathcal{L}(q) &= \{ w \in \Sigma^\ast | \hat\delta_M(q, w) \in F_M \}\\
+        \mathcal{L}(q) &= \{ w \in \Sigma^\ast \mid \hat\delta_M(q, w) \in F_M \}\\
         \mathcal{L}(M) &= \mathcal{L}(s_M)
     \end{align}
 \end{definition}
 
-\subsection{Nondeterministic finite automata}
+\subsection{Nondeterministic Finite Automata}
 
-\subsection{Regular expressions}
+\subsection{Regular Expressions}
 
-\subsection{Derivatives of regular expressions}
+\subsection{Derivatives of Regular Expressions}
 
-\subsection{Equivalence of finite automata and regular expressions}
+\subsection{Equivalence of finite Automata and Regular Expressions}
 
-\section{Automata equivalence and inclusion}
+\section{Automata Equivalence and Inclusion}
 
-\subsection{Automata equivalence}
+\subsection{Automata Equivalence}
 
-\subsection{Hopcroft and Karp's algorithm}
+\subsection{Hopcroft and Karp's Algorithm}
 
-\subsection{Exploitation of closure properties}
+\subsection{Exploitation of Closure Properties}
 
-\subsection{Antichain methods}
+\subsection{Antichain Method}
