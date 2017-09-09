@@ -76,11 +76,233 @@ The following lines formally describe this procedure:
 
 \subsection{Nondeterministic Finite Automata}
 
+Nondeterministic finite automata (NFAs) are defined almost the same way as DFAs.
+There are two differences: There can be more than one initial state.
+Also, multiple transitions carrying the same input symbol can connect a state to different
+successor states.
+
+\begin{definition}
+    A DFA can be defined using the following five components:
+
+    \begin{itemize}
+        \item A set of vertices $Q_N$, called states.
+        Also for NFAs this set has to be finite.
+        \item A set of labels $\Sigma_N$ on the vertices which is called the alphabet of input symbols.
+        It has to be finite as well.
+        \item A set of vertices called ``initial'' states $S_N \subseteq Q_N$.
+        \item A number of states $F_N \subseteq Q_N$ called accepting states.
+        \item A set of directed edges called transitions.
+        Each transition is labelled with one input symbol.
+        This set can be represented by a total function
+        $\Delta_N : Q_N \times \Sigma_N \rightarrow \mathcal{P}(Q_N)$ which
+        associates a set of successor states to every pair of states and input symbols.
+    \end{itemize}
+\end{definition}
+
+Also NFAs can be used to decide whether a word $w$ is decided in a language $L$.
+The idea is the same as for DFAs: the word $w$ is treated as a sequence of input symbols.
+This sequence is then again used to traverse the graph from a starting state.
+If the traversal ends in an accepting state then the word is said to be accepted.
+
+NFAs complicate this procedure though because from every state more than one
+transition, or no transition at all, is allowed to lead to successor states.
+Also, there can be more than one initial states, or none at all.
+Therefore it is in general not possible to know up front for a sequence of input symbols
+a sequence of transitions which will lead to an accepting state.
+
+The solution is to simulate all possible executions of the automaton.
+This is done by extending the transition function to take a set of states as input.
+The intuition is to compute the set of possible successor state for each encountered state and input symbol.
+This reduces our problem to another set of states and a shorter word.
+
+\begin{definition}
+    The extended transition function $\hat\Delta$ takes a set of states and a
+    word as input and inductively computes all states which can be reached
+    after traversing the automaton as indicated by the word.
+
+    \begin{align}
+        \hat\Delta(R, \epsilon) &= R \\
+        \hat\Delta(R, c w) &= \hat\Delta(\bigcup\limits_{r \in R} \Delta(r, c), w)
+    \end{align}
+\end{definition}
+
+The function $\hat\Delta$ can now be used to determine whether a word is accepted by an NFA:
+
+\begin{align}
+    w \in \mathcal{L} \Leftrightarrow \hat\Delta(S_{M_L}, w) \subseteq F_{M_L}
+\end{align}
+
+\begin{definition}
+    Every NFA $N$ can be converted into a DFA $D_N$ as follows:
+\end{definition}
+
+\begin{definition}
+
+\end{definition}
+
 \subsection{Regular Expressions}
+
+Regular expressions are a formal language which is used to represent languages, that is, sets of strings.
+Regular expressions are equivalent in expressive power to the DFAs and NFAs presented above,
+but in many cases humans find them more pleasant to work with.
+
+\begin{definition}
+    The language $R_\Sigma$, the set of regular expressions over the alphabet $\Sigma$,
+    is inductively defined as the smallest set satisfying the following rules:
+
+    \begin{itemize}
+        \item The empty set is a regular expression:
+        $\emptyset \in R_\Sigma$.
+        \item The empty string $\epsilon$ is a regular expression:
+        $\epsilon \in R_\Sigma$.
+        \item A character from $\Sigma$, like $a$, is a regular expression:
+        $\forall c \in \Sigma: c \in R_\Sigma$.
+        \item Two regular expressions, concatenated using the operator $\cdot$, is a regular expression:
+        $\forall r, s \in R_\Sigma: r \cdot s \in R_\Sigma$.
+        In most cases, the operator is omitted to make the regular expression more concise.
+        \item Two regular expressions, combined using the operator $+$, form a regular expression:
+        $\forall r, s \in R_\Sigma: r + s \in R_\Sigma$.
+        \item An application of the postfix operator $\ast$ to a regular expression is a regular expression:
+        $\forall r \in R_\Sigma: r^\ast \in R_\Sigma$.
+        \item A regular expression, surrounded by $()$, is a regular expression:
+        $\forall r \in R_\Sigma: (r) \in R_\Sigma$.
+    \end{itemize}
+\end{definition}
+
+As with every formal language, a semantics is required for regular expressions to define their meaning.
+
+\begin{definition}
+    The following inductive definitions map regular expressions over an alphabet $\Sigma$ to languages:
+
+    \begin{itemize}
+        \item $L(\emptyset) = \{\}$
+        \item $\forall c \in \Sigma: L(c) \coloneqq \{c\} $
+        \item $\forall r, s \in R_\Sigma: L(r \cdot s) \coloneqq L(r) L(s) = \{ u v \mid u \in L(r), v \in L(s) \}$
+        \item $\forall r, s \in R_\Sigma: L(r + s) \coloneqq L(r) \cup L(s)$
+        \item $\forall r \in R_\Sigma: L(r^\ast) \coloneqq L(r)^\ast = \bigcup\limits_{i=0}^{\inf} L(r)^i$
+    \end{itemize}
+\end{definition}
 
 \subsection{Derivatives of Regular Expressions}
 
-\subsection{Equivalence of finite Automata and Regular Expressions}
+Taking the Brzozowski derivative of regular expressions is an interesting operation which, among others, can be used
+to implement regular expressions in software, and also to convert regular expressions into finite automata.
+It can also be extended to other classes of formal languages~\cite{parsing-with-derivatives}.
+The operation has similarities to taking the (partial) derivative of arithmetic expressions.
+
+\begin{definition}
+    The derivative of a regular expression $r$ w.r.t. a letter $c$ is
+    the set of all words in $L(r)$ which start with $c$:
+
+    \begin{align}
+        L(D_c(r)) \coloneqq \{ w \mid c w \in L(r) \}
+    \end{align}
+\end{definition}
+
+It is possible to derive regular expressions by using an algorithm which operates on the syntactic level.
+The idea is always the same, but there exist multiple variants of the algorithm.
+These stem from the fact that care has to be taken to simplify intermediary results to ensure termination.
+In the following the variant of the algorithm in~\cite{proof-pearl-regular-expression-equivalence} is presented.
+
+\begin{definition}
+    The derivative of a regular expression $r$ over the alphabet $\Sigma$
+    can be computed by the following recursive algorithm:
+
+    \begin{align}
+        D_{c}(r) &\rightarrow
+        \begin{cases}
+            \emptyset                       & \text{if } r = \emptyset,\\
+            \emptyset                       & \text{if } r = \epsilon,\\
+            \epsilon                        & \text{if } r = c,\\
+            \emptyset                       & \text{if } r \in \Sigma \land r \neq c,\\
+            D_{c v}(s) + D_c(t)                 & \text{if } r = s + t,\\
+            D_c(s) \cdot t                  & \text{if } r = s \cdot t \land \epsilon \not\in L(s),\\
+            (D_c(s) \cdot t) + D_c(t)       & \text{if } r = s \cdot t \land \epsilon \in L(s).
+        \end{cases}
+    \end{align}
+\end{definition}
+
+Especially the last rule provides potential for infinitely growing terms.
+Since it is unpleasant to implement and use algorithms which do not terminate,
+these growing terms have to be taken care of.
+This is done by replacing $\cdot$ and $+$ by the operations $\oplus$ and $\odot$
+which are defined as follows:
+
+\begin{definition}
+    The operators $\oplus$ and $\odot$ perform simplifications according to axioms of Kleene algebra.
+    Additionally, they sort the terms according to some total order $\preceq$ on regular expressions.
+
+    \begin{align}
+        \emptyset \odot \_     &\rightarrow \emptyset \\
+        \_ \odot \emptyset     &\rightarrow \emptyset \\
+        \epsilon \odot r       &\rightarrow r \\
+        r \odot \epsilon       &\rightarrow r \\
+        (r \cdot s) \odot t    &\rightarrow r \cdot (s \odot t) \\
+        \text{else } r \odot s &\rightarrow r \cdot s
+    \end{align}
+
+    \begin{align}
+        \emptyset \oplus r &\rightarrow r \\
+        r \oplus \emptyset &\rightarrow r \\
+        (r + s) \oplus t   &\rightarrow r \oplus (s \oplus t) \\
+        r \oplus (s + t)   &\rightarrow
+        \begin{cases}
+            s + t            & \text{if } r = s \\
+            r + (s + t)      & \text{if } r \preceq s \\
+            s + (r \oplus t) & \text{otherwise}.
+        \end{cases}
+    \end{align}
+\end{definition}
+
+\begin{definition}
+    The derivative can be extended to words by an inductive definition:
+
+    \begin{align}
+        \label{def:derivative_wrt_words}
+        L(D_v(r)) &\coloneqq \{ u \mid v u \in L(r) \} \\
+    \end{align}
+\end{definition}
+
+\begin{theorem}
+    The derivative of a regular expression $r$ w.r.t. a word $w$ can be calculated with the following algorithm:
+
+    \begin{align}
+        D_\epsilon(r) &\rightarrow r \\
+        \forall a \in \Sigma, w \in \Sigma^\ast: D_{a w}(r) &\rightarrow D_w(D_a(r))
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    We have to prove $L(D_\epsilon(r)) = L(r)$ and $\forall a \in \Sigma, w \in \Sigma^\ast: L(D_{a w}(r)) = L(D_w(D_a(r)))$.
+    The former is shown by reducing $D_\epsilon(r)$.
+    To show the latter, we use the definition of $L(D_w(r))$:
+    \begin{align}
+        L(D_w(D_a(r))) &= \{ v \mid w v \in L(D_a(r)) \}
+    \end{align}
+
+    By the definition of the derivative w.r.t. single characters,
+    we know that $w v \in L(D_a(r)) \Leftrightarrow a w v \in L(r)$.
+    Therefore $\{ v \mid w v \in L(D_a(r)) \} = \{ v \mid a w v \in L(r) \} = L(D_{a w}(r))$.
+\end{proof}
+
+\begin{theorem}
+    A word $w$ is part of the language represented by a regular expression $r$ iff
+    the language of the derivative of $r$ w.r.t. $w$ contains the empty set:
+
+    \begin{align}
+        w \in L(r) \Leftrightarrow \epsilon \in L(D_w(r))
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \begin{align}
+        w \in L(r) \Leftrightarrow w \epsilon \in L(r) \Leftrightarrow \epsilon \in L(D_w(r))
+    \end{align}
+
+    The last step follows from~\ref{def:derivative_wrt_words}
+\end{proof}
+
+\subsection{Equivalence of Finite Automata and Regular Expressions}
 
 \section{Automata Equivalence and Inclusion}
 
