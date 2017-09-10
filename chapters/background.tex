@@ -191,7 +191,7 @@ The operation has similarities to taking the (partial) derivative of arithmetic 
     the set of all words in $\Lang{r}$ which start with $c$:
 
     \begin{align}
-        \Lang{D_c(r)} \coloneqq \{ w \mid c w \in \Lang{r} \}
+        \forall c \in \Sigma: \Lang{D_c(r)} \coloneqq \{ w \in \Sigma^\ast \mid c w \in \Lang{r} \}
     \end{align}
 \end{definition}
 
@@ -255,7 +255,7 @@ which are defined as follows:
 
     \begin{align}
         \label{def:derivative_wrt_words}
-        \Lang{D_v(r)} &\coloneqq \{ u \mid v u \in \Lang{r} \}
+        \Lang{D_v(r)} &\coloneqq \{ u \in \Sigma^\ast \mid v u \in \Lang{r} \}
     \end{align}
 \end{definition}
 
@@ -278,8 +278,8 @@ which are defined as follows:
     Therefore:
     \begin{align}
         \Lang{D_w(r)}
-            = \{ v \mid w v \in \Lang{D_a(r)} \}
-            = \{ v \mid a w v \in \Lang{r} \}
+            = \{ v \in \Sigma^\ast \mid w v \in \Lang{D_a(r)} \}
+            = \{ v \in \Sigma^\ast \mid a w v \in \Lang{r} \}
             = \Lang{D_{a w}(r)}
     \end{align}
 \end{proof}
