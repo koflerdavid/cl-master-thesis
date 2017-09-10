@@ -1,7 +1,9 @@
 \begin{definition}
     The set of all finite sequences of an alphabet $\Sigma$ is written as $\Sigma^\ast$.
     It is formally defined as
-    $\Sigma^\ast = \cup_{i=0}^{\inf} \{c_1 c_2 \ldots c_i \mid \forall 1 \le i \le n: c_i \in \Sigma \} $
+    \begin{align}
+        \Sigma^\ast = \bigcup\limits_{n=0}^\infty \{c_1 c_2 \ldots c_n \mid \forall 1 \le i \le n: c_i \in \Sigma \}
+    \end{align}
     Subsets of $\Sigma^\ast$ are often called languages.
 \end{definition}
 
@@ -13,10 +15,13 @@ The empty sequence (containing no symbols at a all) is denoted by $\epsilon$.
         \item The empty set $\{\}$ for $0$
         \item The language $\{ \epsilon \}$ for $1$
         \item Set union for $+$
-        \item Language concatenation for $\times$.
-        Language concatenation is defined as follows:
-        $L_1 L_2 \coloneqq \{ v w \mid v \in L_1, w \in w \} $
+        \item Language concatenation for $\times$, which is defined as follows:
+            \begin{align}
+                L_1 L_2 \coloneqq \{ v w \mid v \in L_1, w \in w \}
+            \end{align}
         \item Asterate for languages is defined as follows:
-        $L^\ast \coloneqq \bigcup\limits_{i = 0}^/inf L^i$
+            \begin{align}
+                L^\ast \coloneqq \bigcup\limits_{i = 0}^\infty L^i
+            \end{align}
     \end{itemize}
 \end{theorem}
