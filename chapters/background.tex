@@ -205,23 +205,22 @@ In the following the variant of the algorithm in~\cite{proof-pearl-regular-expre
     can be computed by the following recursive algorithm:
 
     \begin{align}
-        D_{c}(r) &\rightarrow
-        \begin{cases}
-            \emptyset                       & \text{if } r = \emptyset,\\
-            \emptyset                       & \text{if } r = \epsilon,\\
-            \epsilon                        & \text{if } r = c,\\
-            \emptyset                       & \text{if } r \in \Sigma \land r \neq c,\\
-            D_{c v}(s) + D_c(t)                 & \text{if } r = s + t,\\
-            D_c(s) \cdot t                  & \text{if } r = s \cdot t \land \epsilon \not\in \Lang{s},\\
-            (D_c(s) \cdot t) + D_c(t)       & \text{if } r = s \cdot t \land \epsilon \in \Lang{s}.
-        \end{cases}
+        D_c(\emptyset)  &\rightarrow \emptyset \\
+        D_c(\epsilon)   &\rightarrow \emptyset \\
+        D_c(c)          &\rightarrow \epsilon \\
+        D_c(a)          &\rightarrow \emptyset                 & \text{if } a \in \Sigma \land a \neq c \\
+        D_c(r^\ast)     &\rightarrow D_c(r) \cdot r^\ast \\
+        D_c(r + s)      &\rightarrow D_c(r) + D_c(s) \\
+        D_c(r \cdot s)  &\rightarrow D_c(r) + D_c(s)           & \text{if } \epsilon \not\in \Lang{r} \\
+        D_c(r \cdot s)  &\rightarrow (D_c(r) \cdot s) + D_c(s) & \text{if } \epsilon \in \Lang{r}
     \end{align}
 \end{definition}
 
 Especially the last rule provides potential for infinitely growing terms.
-Since it is unpleasant to implement and use algorithms which do not terminate,
+Since it is unpleasant to use algorithms which do not terminate,
 these growing terms have to be taken care of.
-This is done by replacing $\cdot$ and $+$ by the operations $\oplus$ and $\odot$
+This is done by replacing $\cdot$ and $+$ by the operators $\oplus$ and $\odot$
+in the right-hand sides of the rules.
 which are defined as follows:
 
 \begin{definition}
