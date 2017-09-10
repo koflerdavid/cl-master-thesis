@@ -69,8 +69,8 @@ The following lines formally describe this procedure:
     The language accepted by the initial state of an automata $M$ is the language of $M$.
 
     \begin{align}
-        \mathcal{L}(q) &= \{ w \in \Sigma^\ast \mid \hat\delta_M(q, w) \in F_M \}\\
-        \mathcal{L}(M) &= \mathcal{L}(s_M)
+        \Lang{q} &= \{ w \in \Sigma^\ast \mid \hat\delta_M(q, w) \in F_M \}\\
+        \Lang{M} &= \Lang{s_M}
     \end{align}
 \end{definition}
 
@@ -129,7 +129,7 @@ This reduces our problem to another set of states and a shorter word.
 The function $\hat\Delta$ can now be used to determine whether a word is accepted by an NFA:
 
 \begin{align}
-    w \in \mathcal{L} \Leftrightarrow \hat\Delta(S_{M_L}, w) \subseteq F_{M_L}
+    w \in L \Leftrightarrow \hat\Delta(S_{M_L}, w) \subseteq F_{M_L}
 \end{align}
 
 \begin{definition}
@@ -175,11 +175,11 @@ As with every formal language, a semantics is required for regular expressions t
     The following inductive definitions map regular expressions over an alphabet $\Sigma$ to languages:
 
     \begin{itemize}
-        \item $L(\emptyset) = \{\}$
-        \item $\forall c \in \Sigma: L(c) \coloneqq \{c\} $
-        \item $\forall r, s \in R_\Sigma: L(r \cdot s) \coloneqq L(r) L(s) = \{ u v \mid u \in L(r), v \in L(s) \}$
-        \item $\forall r, s \in R_\Sigma: L(r + s) \coloneqq L(r) \cup L(s)$
-        \item $\forall r \in R_\Sigma: L(r^\ast) \coloneqq L(r)^\ast = \bigcup\limits_{i=0}^{\inf} L(r)^i$
+        \item $\Lang{\emptyset} = \{\}$
+        \item $\forall c \in \Sigma: \Lang{c} \coloneqq \{c\} $
+        \item $\forall r, s \in R_\Sigma: \Lang{r \cdot s} \coloneqq \Lang{r} \Lang{s} = \{ u v \mid u \in \Lang{r}, v \in \Lang{s} \}$
+        \item $\forall r, s \in R_\Sigma: \Lang{r + s} \coloneqq \Lang{r} \cup \Lang{s}$
+        \item $\forall r \in R_\Sigma: \Lang{r^\ast} \coloneqq \Lang{r}^\ast = \bigcup\limits_{i=0}^{\inf} \Lang{r}^i$
     \end{itemize}
 \end{definition}
 
@@ -192,10 +192,10 @@ The operation has similarities to taking the (partial) derivative of arithmetic 
 
 \begin{definition}
     The derivative of a regular expression $r$ w.r.t. a letter $c$ is
-    the set of all words in $L(r)$ which start with $c$:
+    the set of all words in $\Lang{r}$ which start with $c$:
 
     \begin{align}
-        L(D_c(r)) \coloneqq \{ w \mid c w \in L(r) \}
+        \Lang{D_c(r)} \coloneqq \{ w \mid c w \in \Lang{r} \}
     \end{align}
 \end{definition}
 
@@ -216,8 +216,8 @@ In the following the variant of the algorithm in~\cite{proof-pearl-regular-expre
             \epsilon                        & \text{if } r = c,\\
             \emptyset                       & \text{if } r \in \Sigma \land r \neq c,\\
             D_{c v}(s) + D_c(t)                 & \text{if } r = s + t,\\
-            D_c(s) \cdot t                  & \text{if } r = s \cdot t \land \epsilon \not\in L(s),\\
-            (D_c(s) \cdot t) + D_c(t)       & \text{if } r = s \cdot t \land \epsilon \in L(s).
+            D_c(s) \cdot t                  & \text{if } r = s \cdot t \land \epsilon \not\in \Lang{s},\\
+            (D_c(s) \cdot t) + D_c(t)       & \text{if } r = s \cdot t \land \epsilon \in \Lang{s}.
         \end{cases}
     \end{align}
 \end{definition}
@@ -259,7 +259,7 @@ which are defined as follows:
 
     \begin{align}
         \label{def:derivative_wrt_words}
-        L(D_v(r)) &\coloneqq \{ u \mid v u \in L(r) \} \\
+        \Lang{D_v(r)} &\coloneqq \{ u \mid v u \in \Lang{r} \}
     \end{align}
 \end{definition}
 
@@ -273,16 +273,16 @@ which are defined as follows:
 \end{theorem}
 
 \begin{proof}
-    We have to prove $L(D_\epsilon(r)) = L(r)$ and $\forall a \in \Sigma, w \in \Sigma^\ast: L(D_{a w}(r)) = L(D_w(D_a(r)))$.
+    We have to prove $\Lang{D_\epsilon(r)} = \Lang{r}$ and $\forall a \in \Sigma, w \in \Sigma^\ast: \Lang{D_{a w}(r)} = \Lang{D_w(D_a(r))}$.
     The former is shown by reducing $D_\epsilon(r)$.
-    To show the latter, we use the definition of $L(D_w(r))$:
+    To show the latter, we use the definition of $\Lang{D_w(r)}$:
     \begin{align}
-        L(D_w(D_a(r))) &= \{ v \mid w v \in L(D_a(r)) \}
+        \Lang{D_w(D_a(r))} &= \{ v \mid w v \in \Lang{D_a(r)} \}
     \end{align}
 
     By the definition of the derivative w.r.t. single characters,
-    we know that $w v \in L(D_a(r)) \Leftrightarrow a w v \in L(r)$.
-    Therefore $\{ v \mid w v \in L(D_a(r)) \} = \{ v \mid a w v \in L(r) \} = L(D_{a w}(r))$.
+    we know that $w v \in \Lang{D_a(r)} \Leftrightarrow a w v \in \Lang{r}$.
+    Therefore $\{ v \mid w v \in \Lang{D_a(r)} \} = \{ v \mid a w v \in \Lang{r} \} = \Lang{D_{a w}(r)}$.
 \end{proof}
 
 \begin{theorem}
@@ -290,13 +290,13 @@ which are defined as follows:
     the language of the derivative of $r$ w.r.t. $w$ contains the empty set:
 
     \begin{align}
-        w \in L(r) \Leftrightarrow \epsilon \in L(D_w(r))
+        w \in \Lang{r} \Leftrightarrow \epsilon \in \Lang{D_w(r)}
     \end{align}
 \end{theorem}
 
 \begin{proof}
     \begin{align}
-        w \in L(r) \Leftrightarrow w \epsilon \in L(r) \Leftrightarrow \epsilon \in L(D_w(r))
+        w \in \Lang{r} \Leftrightarrow w \epsilon \in \Lang{r} \Leftrightarrow \epsilon \in \Lang{D_w(r)}
     \end{align}
 
     The last step follows from~\ref{def:derivative_wrt_words}
