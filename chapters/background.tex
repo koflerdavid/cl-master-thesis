@@ -273,16 +273,19 @@ which are defined as follows:
 \end{theorem}
 
 \begin{proof}
-    We have to prove $\Lang{D_\epsilon(r)} = \Lang{r}$ and $\forall a \in \Sigma, w \in \Sigma^\ast: \Lang{D_{a w}(r)} = \Lang{D_w(D_a(r))}$.
-    The former is shown by reducing $D_\epsilon(r)$.
-    To show the latter, we use the definition of $\Lang{D_w(r)}$:
-    \begin{align}
-        \Lang{D_w(D_a(r))} &= \{ v \mid w v \in \Lang{D_a(r)} \}
-    \end{align}
+    We have to prove that both rules compute the right language.
+    The former is trivially shown because it reduces to the same regular expression.
 
+    For the latter, first we use the definition of $\Lang{D_w(r)}$ in~\ref{def:derivative_wrt_words}.
     By the definition of the derivative w.r.t. single characters,
-    we know that $w v \in \Lang{D_a(r)} \Leftrightarrow a w v \in \Lang{r}$.
-    Therefore $\{ v \mid w v \in \Lang{D_a(r)} \} = \{ v \mid a w v \in \Lang{r} \} = \Lang{D_{a w}(r)}$.
+    we know that iff $w~v~\in~\Lang{D_a(r)}$, then $a w v \in \Lang{r}$.
+    Therefore:
+    \begin{align}
+        \Lang{D_w(r)}
+            = \{ v \mid w v \in \Lang{D_a(r)} \}
+            = \{ v \mid a w v \in \Lang{r} \}
+            = \Lang{D_{a w}(r)}
+    \end{align}
 \end{proof}
 
 \begin{theorem}
