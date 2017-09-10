@@ -7,12 +7,26 @@ The aim is to study their essential properties and which types of computational 
 
 \begin{definition}
     The set of all finite sequences of an alphabet $\Sigma$ is written as $\Sigma^\ast$.
-    It is formally defned as
+    It is formally defined as
     $\Sigma^\ast = \cup_{i=0}^{\inf} \{c_1 c_2 \ldots c_i \mid \forall 1 \le i \le n: c_i \in \Sigma \} $
-    A language is a subset of $\Sigma^\ast$.
+    Subsets of $\Sigma^\ast$ are often called languages.
 \end{definition}
 
 The empty sequence (containing no symbols at a all) is denoted by $\epsilon$.
+
+\begin{theorem}
+    Languages form a Kleene algebra with the following definitions:
+    \begin{itemize}
+        \item The empty set $\{\}$ for $0$
+        \item The language $\{ \epsilon \}$ for $1$
+        \item Set union for $+$
+        \item Language concatenation for $\times$.
+            Language concatenation is defined as follows:
+            $L_1 L_2 \coloneqq \{ v w \mid v \in L_1, w \in w \} $
+        \item Asterate for languages is defined as follows:
+            $L^\ast \coloneqq \bigcup\limits_{i = 0}^/inf L^i$
+    \end{itemize}
+\end{theorem}
 
 \subsection{Deterministic Finite Automata}
 
@@ -173,9 +187,9 @@ As with every formal language, a semantics is required for regular expressions t
     \begin{itemize}
         \item $\Lang{\emptyset} = \{\}$
         \item $\forall c \in \Sigma: \Lang{c} \coloneqq \{c\} $
-        \item $\forall r, s \in R_\Sigma: \Lang{r \cdot s} \coloneqq \Lang{r} \Lang{s} = \{ u v \mid u \in \Lang{r}, v \in \Lang{s} \}$
+        \item $\forall r, s \in R_\Sigma: \Lang{r \cdot s} \coloneqq \Lang{r} \Lang{s}$
         \item $\forall r, s \in R_\Sigma: \Lang{r + s} \coloneqq \Lang{r} \cup \Lang{s}$
-        \item $\forall r \in R_\Sigma: \Lang{r^\ast} \coloneqq \Lang{r}^\ast = \bigcup\limits_{i=0}^{\inf} \Lang{r}^i$
+        \item $\forall r \in R_\Sigma: \Lang{r^\ast} \coloneqq \Lang{r}^\ast$
     \end{itemize}
 \end{definition}
 
