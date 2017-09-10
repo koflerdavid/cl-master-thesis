@@ -54,6 +54,21 @@ The function $\hat\Delta$ can now be used to determine whether a word is accepte
     w \in L \Leftrightarrow \hat\Delta(S_{M_L}, w) \subseteq F_{M_L}
 \end{align}
 
+This transformation to view every NFA as a DFA.
+That DFA's states are all possible subsets of the state set of the NFA.
+
 \begin{definition}
     Every NFA $N$ can be converted into a DFA $D_N$ as follows:
+    \begin{align}
+        Q_D &= \Powerset{Q_N} \\
+        \Sigma_D &= \Sigma_N \\
+        s_D &= S_N \\
+        f_D &= \{ S \in \Powerset{F_N} \mid S \cap F_N \neq \{\} \} \\
+        \delta_D(S, c) &= \hat\Delta_N(S, c)
+    \end{align}
 \end{definition}
+
+The disadvantage of this transformation is that in general the generated DFA
+has exponentially more states than the original NFA, i.e., $|Q_D| = 2^{|Q_N|}$.
+In many cases it is possible to reduce this amount by either pruning states
+which are not reachable from starting states, or by not even compting them in the first place.
