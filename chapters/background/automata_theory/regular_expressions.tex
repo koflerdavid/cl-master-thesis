@@ -1,0 +1,40 @@
+Regular expressions are a formal language which is used to represent languages, that is, sets of strings.
+Regular expressions are equivalent in expressive power to the DFAs and NFAs presented above,
+but in many cases humans find them more pleasant to work with.
+
+\begin{definition}
+    The language $R_\Sigma$, the set of regular expressions over the alphabet $\Sigma$,
+    is inductively defined as the smallest set satisfying the following rules:
+
+    \begin{itemize}
+        \item The empty set is a regular expression:
+        $\emptyset \in R_\Sigma$.
+        \item The empty string $\epsilon$ is a regular expression:
+        $\epsilon \in R_\Sigma$.
+        \item A character from $\Sigma$, like $a$, is a regular expression:
+        $\forall c \in \Sigma: c \in R_\Sigma$.
+        \item Two regular expressions, concatenated using the operator $\cdot$, is a regular expression:
+        $\forall r, s \in R_\Sigma: r \cdot s \in R_\Sigma$.
+        In most cases, the operator is omitted to make the regular expression more concise.
+        \item Two regular expressions, combined using the operator $+$, form a regular expression:
+        $\forall r, s \in R_\Sigma: r + s \in R_\Sigma$.
+        \item An application of the postfix operator $\ast$ to a regular expression is a regular expression:
+        $\forall r \in R_\Sigma: r^\ast \in R_\Sigma$.
+        \item A regular expression, surrounded by $()$, is a regular expression:
+        $\forall r \in R_\Sigma: (r) \in R_\Sigma$.
+    \end{itemize}
+\end{definition}
+
+As with every formal language, a semantics is required for regular expressions to define their meaning.
+
+\begin{definition}
+    The following inductive definitions map regular expressions over an alphabet $\Sigma$ to languages:
+
+    \begin{itemize}
+        \item $\Lang{\emptyset} = \{\}$
+        \item $\forall c \in \Sigma: \Lang{c} \coloneqq \{c\} $
+        \item $\forall r, s \in R_\Sigma: \Lang{r \cdot s} \coloneqq \Lang{r} \Lang{s}$
+        \item $\forall r, s \in R_\Sigma: \Lang{r + s} \coloneqq \Lang{r} \cup \Lang{s}$
+        \item $\forall r \in R_\Sigma: \Lang{r^\ast} \coloneqq \Lang{r}^\ast$
+    \end{itemize}
+\end{definition}

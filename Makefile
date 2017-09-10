@@ -13,4 +13,4 @@ output/thesis.bbl: output/thesis.aux biblio.bib
 .PHONY: clean
 clean:
 	$(RM) output/*.{aux,bbl,blg,log,out,pdf,toc}
-
+	$(RM) output/chapters/*.aux

@@ -1,0 +1,118 @@
+Taking the Brzozowski derivative of regular expressions is an interesting operation which, among others, can be used
+to implement regular expressions in software, and also to convert regular expressions into finite automata.
+It can also be extended to other classes of formal languages~\cite{parsing-with-derivatives}.
+The operation has similarities to taking the (partial) derivative of arithmetic expressions.
+
+\begin{definition}
+    The derivative of a regular expression $r$ w.r.t. a letter $c$ is
+    the set of all words in $\Lang{r}$ which start with $c$:
+
+    \begin{align}
+        \forall c \in \Sigma: \Lang{D_c(r)} \coloneqq \{ w \in \Sigma^\ast \mid c w \in \Lang{r} \}
+    \end{align}
+\end{definition}
+
+It is possible to derive regular expressions by using an algorithm which operates on the syntactic level.
+The idea is always the same, but there exist multiple variants of the algorithm.
+These stem from the fact that care has to be taken to simplify intermediary results to ensure termination.
+In the following the variant of the algorithm in~\cite{proof-pearl-regular-expression-equivalence} is presented.
+
+\begin{definition}
+    The derivative of a regular expression $r$ over the alphabet $\Sigma$
+    can be computed by the following recursive algorithm:
+
+    \begin{align}
+        D_c(\emptyset)  &\rightarrow \emptyset \\
+        D_c(\epsilon)   &\rightarrow \emptyset \\
+        D_c(c)          &\rightarrow \epsilon \\
+        D_c(a)          &\rightarrow \emptyset                 & \text{if } a \in \Sigma \land a \neq c \\
+        D_c(r^\ast)     &\rightarrow D_c(r) \cdot r^\ast \\
+        D_c(r + s)      &\rightarrow D_c(r) + D_c(s) \\
+        D_c(r \cdot s)  &\rightarrow D_c(r) + D_c(s)           & \text{if } \epsilon \not\in \Lang{r} \\
+        D_c(r \cdot s)  &\rightarrow (D_c(r) \cdot s) + D_c(s) & \text{if } \epsilon \in \Lang{r}
+    \end{align}
+\end{definition}
+
+Especially the last rule provides potential for infinitely growing terms.
+Since it is unpleasant to use algorithms which do not terminate,
+these growing terms have to be taken care of.
+This is done by replacing $\cdot$ and $+$ by the operators $\oplus$ and $\odot$
+in the right-hand sides of the rules.
+which are defined as follows:
+
+\begin{definition}
+    The operators $\oplus$ and $\odot$ perform simplifications according to axioms of Kleene algebra.
+    Additionally, they sort the terms according to some total order $\preceq$ on regular expressions.
+
+    \begin{align}
+        \emptyset \odot \_     &\rightarrow \emptyset \\
+        \_ \odot \emptyset     &\rightarrow \emptyset \\
+        \epsilon \odot r       &\rightarrow r \\
+        r \odot \epsilon       &\rightarrow r \\
+        (r \cdot s) \odot t    &\rightarrow r \cdot (s \odot t) \\
+        \text{else } r \odot s &\rightarrow r \cdot s
+    \end{align}
+
+    \begin{align}
+        \emptyset \oplus r &\rightarrow r \\
+        r \oplus \emptyset &\rightarrow r \\
+        (r + s) \oplus t   &\rightarrow r \oplus (s \oplus t) \\
+        r \oplus (s + t)   &\rightarrow
+        \begin{cases}
+            s + t            & \text{if } r = s \\
+            r + (s + t)      & \text{if } r \preceq s \\
+            s + (r \oplus t) & \text{otherwise}.
+        \end{cases}
+    \end{align}
+\end{definition}
+
+\begin{definition}
+    The derivative can be extended to words by an inductive definition:
+
+    \begin{align}
+        \label{def:derivative_wrt_words}
+        \Lang{D_v(r)} &\coloneqq \{ u \in \Sigma^\ast \mid v u \in \Lang{r} \}
+    \end{align}
+\end{definition}
+
+\begin{theorem}
+    The derivative of a regular expression $r$ w.r.t. a word $w$ can be calculated with the following algorithm:
+
+    \begin{align}
+        D_\epsilon(r) &\rightarrow r \\
+        \forall a \in \Sigma, w \in \Sigma^\ast: D_{a w}(r) &\rightarrow D_w(D_a(r))
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    We have to prove that both rules compute the right language.
+    The former is trivially shown because it reduces to the same regular expression.
+
+    For the latter, first we use the definition of $\Lang{D_w(r)}$ in~\ref{def:derivative_wrt_words}.
+    By the definition of the derivative w.r.t. single characters,
+    we know that iff $w~v~\in~\Lang{D_a(r)}$, then $a w v \in \Lang{r}$.
+    Therefore:
+    \begin{align}
+        \Lang{D_w(r)}
+        = \{ v \in \Sigma^\ast \mid w v \in \Lang{D_a(r)} \}
+        = \{ v \in \Sigma^\ast \mid a w v \in \Lang{r} \}
+        = \Lang{D_{a w}(r)}
+    \end{align}
+\end{proof}
+
+\begin{theorem}
+    A word $w$ is part of the language represented by a regular expression $r$ iff
+    the language of the derivative of $r$ w.r.t. $w$ contains the empty set:
+
+    \begin{align}
+        w \in \Lang{r} \Leftrightarrow \epsilon \in \Lang{D_w(r)}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \begin{align}
+        w \in \Lang{r} \Leftrightarrow w \epsilon \in \Lang{r} \Leftrightarrow \epsilon \in \Lang{D_w(r)}
+    \end{align}
+
+    The last step follows from~\ref{def:derivative_wrt_words}
+\end{proof}

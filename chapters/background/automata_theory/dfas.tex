@@ -1,0 +1,57 @@
+Deterministic finite automata (DFAs) can be thought of as graphs with labeled vertices and edges.
+
+\begin{definition}
+    A DFA can be defined using the following five components:
+
+    \begin{itemize}
+        \item A set of vertices $Q_D$, called states.
+        As implied by the term DFA, this set has to be finite.
+        \item A set of labels $\Sigma_D$ on the vertices which is called the alphabet of input symbols.
+        It has to be finite as well.
+        \item An ``initial'' state $s_D \in Q_D$.
+        \item A number of states $F_D \subseteq Q_D$ called accepting states.
+        \item A set of directed edges called transitions.
+        Each transition is labelled with one input symbol.
+        Furthermore, for each input symbol there is exactly one transition labelled with
+        the symbol between each pair of states.
+        Because of this, this set can be represented by a total function
+        $\delta_D : Q_D \times \Sigma_N \rightarrow Q_D$ which associates a successor state to
+        every pair of state and input symbol.
+    \end{itemize}
+\end{definition}
+
+DFAs are chiefly used to represent transition systems.
+A system modeled by the automaton is thought as always being in one of the states contained in the automata.
+When the system receives an input, a transition to another state is possible.
+
+For certain classes of languages, a DFA can be used to decide whether a specific word $w$ is contained in a language $L$.
+This is done by first constructing an appropriate automaton $M$ for the language.
+Then, the transition system is initialized to be at the initial state $s_{M}$.
+Then, the word $w$ is treated as a sequence of input symbols $c_1 c_2 \ldots c_n$.
+For each input symbol, the state transition $\delta_{M}(q, c)$ matching the current state $q$ and input symbol $c$ is followed.
+If the system reaches one of the accepting states and there are no more input symbols left, then the
+automaton is said to accept the input.
+
+The following lines formally describe this procedure:
+\begin{align}
+    w \in L \Leftrightarrow \hat\delta_{M_L}(s_{M_L}, w) \in F_{M_L}
+\end{align}
+
+\begin{definition}
+    $\hat\delta$ is the transition function of the automaton $M$, extended to words.
+    This is done by using induction over the length of the input word.
+    \begin{align}
+        \hat\delta_M(q, \epsilon) &= q\\
+        \hat\delta_M(q, c w) &= \hat\delta_M(\delta_M(q, c), w)
+    \end{align}
+\end{definition}
+
+\begin{definition}
+    The set of words accepted by starting from a state $q$ is said to be the language of $q$.
+    The language accepted by the initial state of an automata $M$ is the language of $M$.
+
+    \begin{align}
+        \Lang{q} &= \{ w \in \Sigma^\ast \mid \hat\delta_M(q, w) \in F_M \}\\
+        \Lang{M} &= \Lang{s_M}
+    \end{align}
+\end{definition}
