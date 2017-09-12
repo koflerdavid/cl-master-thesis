@@ -1,10 +1,10 @@
 Nondeterministic finite automata (NFAs) are defined almost the same way as DFAs.
-There are two differences: There can be more than one initial state.
+There are two major differences: There can be more than one initial state.
 Also, multiple transitions carrying the same input symbol can connect a state to different
 successor states.
 
 \begin{definition}
-    A DFA can be defined using the following five components:
+    A NFA can be defined using the following five components:
 
     \begin{itemize}
         \item A set of vertices $Q_N$, called states.
@@ -28,18 +28,21 @@ If the traversal ends in an accepting state then the word is said to be accepted
 
 NFAs complicate this procedure though because from every state more than one
 transition, or no transition at all, is allowed to lead to successor states.
-Also, there can be more than one initial states, or none at all.
-Therefore it is in general not possible to know up front for a sequence of input symbols
-a sequence of transitions which will lead to an accepting state.
+Also, there can be more than one initial state, or none at all.
+Therefore it is in general not possible to know up front
+a sequence of transitions which will lead to an accepting state
+for a given sequence of input symbols.
 
-The solution is to simulate all possible executions of the automaton.
-This is done by extending the transition function to take a set of states as input.
-The intuition is to compute the set of possible successor state for each encountered state and input symbol.
-This reduces our problem to another set of states and a shorter word.
+A solution is to simulate all possible executions of the automaton.
+This is done by extending the transition function to take
+a set of states and a word as input.
+Before every step there will then be a set of states the automaton
+could currently occupy.
+This set, $\Delta$ and the input symbol is then used to compute the possible successor states.
 
 \begin{definition}
     The extended transition function $\hat\Delta$ takes a set of states and a
-    word as input and inductively computes all states which can be reached
+    word as input and recursively computes all states the automaton could occupy
     after traversing the automaton as indicated by the word.
 
     \begin{align}
@@ -54,8 +57,12 @@ The function $\hat\Delta$ can now be used to determine whether a word is accepte
     w \in L \Leftrightarrow \hat\Delta(S_{M_L}, w) \subseteq F_{M_L}
 \end{align}
 
-This transformation to view every NFA as a DFA.
+SThis transformation to view every NFA as a DFA.
 That DFA's states are all possible subsets of the state set of the NFA.
+
+Since computing $\hat\Delta$ is actually a perfectly deterministic operation
+we have actually just transformed NFA into a DFA.
+The following definition makes this transformation explicit:
 
 \begin{definition}
     Every NFA $N$ can be converted into a DFA $D_N$ as follows:
@@ -68,7 +75,10 @@ That DFA's states are all possible subsets of the state set of the NFA.
     \end{align}
 \end{definition}
 
-The disadvantage of this transformation is that in general the generated DFA
-has exponentially more states than the original NFA, i.e., $|Q_D| = 2^{|Q_N|}$.
+The disadvantage of this transformation is that
+in general the generated DFA has exponentially more states
+than the original NFA since $|Q_D| = |\Powerset{Q_N} = 2^{|Q_N|}$.
 In many cases it is possible to reduce this amount by either pruning states
-which are not reachable from starting states, or by not even compting them in the first place.
+which are not reachable from starting states,
+or by not even computing them in the first place.
+This is done by exploring the NFA from the starting states.
