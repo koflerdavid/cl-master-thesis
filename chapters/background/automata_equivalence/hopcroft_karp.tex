@@ -1,0 +1,20 @@
+Hopcroft and Karp's algorithm takes as input a DFA and a pair of states
+(usually the starting states) and tries to compute a bisimulation
+relating them.
+If it succeeds then the two states are proven to accept the same language.
+If not, then the algorithm terminates and can be made to return a pair
+of states that do not accept the same language.
+
+\begin{definition}
+    \begin{align*}
+        \underline{\mathit{Naive(P_1, P_2)}}: &\quad (Q \times Q) \to \{\mathbf{true}, \mathbf{false}\} \\
+        \text{(1) } & R := \emptyset, \mathit{todo} := \{(P_1, P_2)\} \\
+        \text{(2) } & \text{while } \mathit{todo} \neq \emptyset \text{ do}\\
+        & \text{(2.1)}\quad \mathit{todo} := \mathit{todo} \setminus \{(P', Q')\}\\
+        & \textbf{(2.2)}\quad \textbf{if } \mathbf{(P', Q') \in} \textbf{ R} \textbf{ then goto (2)}\\
+        & \text{(2.3)}\quad \text{if } \text{acc}_N(P') \nLeftrightarrow \text{acc}_N(Q') \text{ then return } \mathbf{false}\\
+        & \text{(2.4)}\quad \mathit{todo} := \mathit{todo} \cup \bigcup_{a \in \Sigma}{(\delta(P', a), \delta(Q', a))}\\
+        & \text{(2.5)}\quad R := R \cup \{(P', Q')\} \\
+        \text{(3) } & \text{return } \mathbf{true}\\
+    \end{align*}
+\end{definition}

@@ -24,9 +24,21 @@
 
 \section{Automata Equivalence and Inclusion}
 
+    One of the most interesting applications of automata theory are model~checking and verification.
+    The goal is to check whether a specification has certain properties
+    or whether the realisation of a specification behaves as expected.
+    Naturally, the question of equivalence between two model arises:
+    how can two automata, maybe a simulated and a real one reconstructed from a trace,
+    shown to be equivalent?
+
+    The following section explains the necessary theoretical background and presents a
+    new development in this field.
+
     \subsection{Automata Equivalence}
+    \input{chapters/background/automata_equivalence/equivalence.tex}
 
     \subsection{Hopcroft and Karp's Algorithm}
+    \input{chapters/background/automata_equivalence/hopcroft_karp.tex}
 
     \subsection{Exploitation of Closure Properties}
 

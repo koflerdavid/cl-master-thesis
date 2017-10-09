@@ -1,0 +1,26 @@
+The following definitions transform the question of
+whether two automata are equivalent to
+whether the set of their starting states are equivalent.
+This definition is more general and useful
+for the exposition of the algorithms that determine equivalence.
+
+\begin{definition}
+    Two finite automata $M$ and $N$ are merged with the following definitions.
+    \begin{align}
+        Q_{M \sqcup N} = Q_M \cup Q_N \\
+        \Sigma_{M \sqcup N} = \Sigma_M \cup \Sigma N
+    \end{align}
+
+    The sets $Q_M$ and $Q_N$ have to be disjoint, which
+    can always be ensured by renaming states.
+    This is required to ensure that the languages of each subset of states are preserved.
+\end{definition}
+
+\begin{definition}
+    Two sets of states $P$ and $Q$ of an NFA $M$ are considered
+    to be equivalent iff they accept the same language:
+
+    \begin{align}
+        P \equiv Q \iff \Lang{P} = \Lang{Q}
+    \end{align}
+\end{definition}
