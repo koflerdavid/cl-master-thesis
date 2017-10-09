@@ -1,45 +1,36 @@
-Deterministic finite automata (DFAs) can be thought of as graphs with labeled vertices and edges.
+Deterministic finite automata (DFAs) are a subset of NFAs.
+There are two major differences: There can only be one initial state.
+Also, for every state state and input symbol there
+has to be exactly one transition to a successor state.
+These two properties make DFAs significantly easier to describe and to handle.
+
+The latter requirement is often inconvenient because NFAs can easily define
+failure conditions by just specifying the ``happy'' paths.
+In practice, this is significant especially for large alphabets, e.g.,
+the set of Unicode characters.
+Implementations of DFAs can optimize these common cases and
+make all missing transitions go to a designated ``failure'' state.
 
 \begin{definition}
     A DFA can be defined using the following five components:
 
     \begin{itemize}
         \item A set of vertices $Q_D$, called states.
-            As implied by the term DFA, this set has to be finite.
+            Also for DFAs this set has to be finite.
         \item A set of labels $\Sigma_D$ on the vertices,
             which is called the alphabet of input symbols.
             It has to be finite as well.
-        \item An ``initial'' state $s_D \in Q_D$.
-        \item A number of states $F_D \subseteq Q_D$ called accepting states.
+        \item An initial state $s_D \in Q_D$.
+        \item A number of vertices $F_D \subseteq Q_N$ called accepting states.
         \item A set of directed edges called transitions.
-        Each transition is labelled with one input symbol.
-        Furthermore, for each input symbol there is
-        exactly one transition labelled with the symbol between each pair of states.
-        Because of this, this set can be represented by a total function
-        $\delta_D : Q_D \times \Sigma_N \rightarrow Q_D$
-        that associates a successor state to every pair of state and input symbol.
+            Each transition is labelled with one input symbol.
+            Furthermore, for each input symbol there is
+            exactly one transition labelled with the symbol between each pair of states.
+            Because of this, this set can be represented by a total function
+            $\delta_D : Q_D \times \Sigma_N \rightarrow Q_D$
+            that associates a successor state to every pair of states and input symbols.
     \end{itemize}
 \end{definition}
-
-DFAs are often used to describe transition systems.
-A system modeled by an automaton is thought as
-always being in one of the states contained in the automaton.
-When the system receives an input, a transition to another state is made.
-
-For certain classes of languages, a DFA can be used to decide
-whether a specific word $w$ is contained in a language $L$.
-This is done by first constructing an appropriate automaton $M$ for the language.
-Then, the transition system is initialized to be at the initial state $s_{M}$.
-Then, the word $w$ is treated as a sequence of input symbols $c_1 c_2 \ldots c_n$.
-For each input symbol, the state transition $\delta_{M}(q, c)$
-matching the current state $q$ and input symbol $c$ is followed.
-If the system reaches one of the accepting states and there are no more input symbols left,
-then the automaton is said to accept the input.
-
-The following lines formally describe this procedure:
-\begin{align}
-    w \in L \Leftrightarrow \hat\delta_{M_L}(s_{M_L}, w) \in F_{M_L}
-\end{align}
 
 \begin{definition}
     $\hat\delta$ is the transition function of the automaton $M$, extended to words.
@@ -50,17 +41,32 @@ The following lines formally describe this procedure:
     \end{align}
 \end{definition}
 
-\begin{definition}
-    The set of words accepted by starting from a state $q$ is said to be the language of $q$.
-    The language accepted by the initial state of an automata $M$ is the language of $M$.
+Since computing $\hat\Delta$ for every pair of states and input symbols of an NFA
+is a deterministic operation,
+it is possible to transform every NFA into a DFA accepting the same language.
+The core idea is to regard the current set of possible states as the current state of
+this equivalent DFA.
+The following theorem makes this transformation explicit:
 
+\begin{theorem}
+    Every NFA $N$ can be converted into a DFA $D_N$ as follows:
     \begin{align}
-        \Lang{q} &= \{ w \in \Sigma^\ast \mid \hat\delta_M(q, w) \in F_M \}\\
-        \Lang{M} &= \Lang{s_M}
+        Q_D &= \Powerset{Q_N} \\
+        \Sigma_D &= \Sigma_N \\
+        s_D &= S_N \\
+        f_D &= \{ S \in \Powerset{F_N} \mid S \cap F_N \neq \{\} \} \\
     \end{align}
-\end{definition}
 
-\begin{definition}
-    The family of languages that can be described with a DFA
-    accepting its words is called the regular languages.
-\end{definition}
+    In particular
+    \begin{align}
+        \forall S \subseteq Q_N, w \in \Sigma&ast: \hat\delta(S, w) = \hat\Delta(S, w)
+    \end{align}
+\end{theorem}
+
+The disadvantage of this transformation is that
+in general the generated DFA has exponentially more states
+than the original NFA since $|Q_D| = |\Powerset{Q_N} = 2^{|Q_N|}$.
+In many cases it is possible to reduce this amount by either pruning states
+that are not reachable from starting states,
+or by not even computing them in the first place.
+This is done by exploring the NFA from the starting states.
