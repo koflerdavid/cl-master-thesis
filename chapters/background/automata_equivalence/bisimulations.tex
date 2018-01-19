@@ -1,0 +1,158 @@
+\begin{definition}
+    A category is a class of \textit{objects}, together with \textit{morphisms} between them.
+    A morphism maps an \textit{origin} object to a \textit{destination} object.
+    For every object, we require the existence of an \textit{identity} morphism $id$ from the object to itself.
+
+    Also, we require composability between morphisms:
+    Two morphisms can be \textit{composed} if the source object of the first is
+    the destination object of the second.
+    For two morphisms $f : B \rightarrow C$ and $g : A \rightarrow B$,
+    this is described as $f \circ g : A \rightarrow C$.
+
+    The identity morphism must behave as a neutral element regarding composition, i.e.,
+    the composition of any morphism of a given category with an identity morphism
+    must behave as the original morphism.
+\end{definition}
+
+\begin{example}
+    The class of all possible sets as objects, together with functions between them as morphisms,
+    yields the category \textbf{Set}.
+    The identity function $id_A$ acts as the identity morphism for every set $A$.
+    Clearly, function composition satisfies the above requirements.
+\end{example}
+
+\begin{example}
+    Every graph $G$ with the set $V$ as vertices and the set $E$ as edges
+    can be turned into a category with the set $V$ as objects
+    using the \textit{Free Category} construction.
+    To fulfil the category laws, its morphisms are drawn from
+    the smallest superset $E'$ of $E$ fulfilling the following conditions:
+
+    \begin{itemize}
+        \item There shall be an edge from every vertex $v \in V$ to itself.
+        \item For every pair of edges $e, f \in E$ and vertices $u, v, w \in V$,
+              where $e$ leads from $v$ to $w$ and $f$ from $u$ to $v$,
+              there shall be an edge $e \circ f$ from $u$ to $w$.
+    \end{itemize}
+\end{example}
+
+\begin{definition}
+    The morphisms of the category of \textit{small categories} are called \textit{functors}.
+    A \textit{functor} $F : A \rightarrow B$ maps objects and mappings between categories.
+    Applying a functor to a mapping is also called \textit{lifting}.
+    Functors have to preserve the following properties:
+
+    \begin{itemize}
+        \item For every morphism $f$ and $g$ from $A$, $F (g \circ f)$
+              must be equivalent to $F g \circ F f$.
+        \item The identity morphism of an object $a$ from $A$, $F id_a $,
+              must be lifted to $id_{F_a}$, the identity morphism of $F a$.
+    \end{itemize}
+
+    Functors that map a category to itself are called \textit{endofunctors}.
+\end{definition}
+
+\begin{definition}
+    Given a category $\Cat{C}$ and an endofunctor $F : \Cat{C} \rightarrow \Cat{C}$,
+    every object $A$ from $Cat{C}$, together with a morphism
+    $\alpha : F(\Cat{C}) \rightarrow \Cat{C}$
+    specifies an $F$-algebra with the object $A$ as \textit{carrier}.
+\end{definition}
+
+Algebras are mathematical objects that are equipped with some \textit{constructors}.
+A constructor is a function that makes it possible to generate elements of
+the carrier algebra\footnote{In the abstract definition, these are combined into a single
+constructor by using the disjoint union of functions}, often from existing ones.
+
+\begin{example}
+    In the category \textbf{Set}, the function
+    $[\textit{nil}, \textit{cons}] : \textbf{1} \sqcup X \times List(X) \rightarrow List(X)$
+    with the carrier $List(X)$ is the algebra of lists of elements of the set $X$.
+    This algebra has one constructor that maps the singleton set to the empty list,
+    or prepends an element of $X$ to another list.
+\end{example}
+
+Coalgebras are mathematical structures which are not defined in terms of constructors
+out of which objects are composed, but by destructors by which an object is "taken apart".
+They are especially suited for infinite or circular data structures,
+such as streams, graphs, automata, processes, etc.
+Said differently, algebras \textit{construct} objects
+while coalgebras \textit{observe} objects~\cite{Jacobs97atutorial}.
+
+\begin{definition}
+    Given a category $\Cat{C}$ and an endofunctor $F : \Cat{C} \rightarrow \Cat{C}$,
+    every object $X$ from $\Cat{C}$, together with a morphism
+    $\alpha : \mathcal{C} \rightarrow F(\mathcal{C})$
+    specifies an $F$-coalgebra with the object $X$ as \textit{carrier}.
+\end{definition}
+
+\begin{example}
+    Streams are an infinite data structure and therefore
+    a prime example for a coinductive data structure.
+    The function
+    $\textit{next} : \textbf{Stream}(A) \rightarrow A \times \textbf{Stream}(A)$
+    is a destructor that decomposes a stream of elements from $A$ into a head and a tail.
+    The destructor \textit{next} can be used to define the functions \textit{head} and \textit{tail}.
+    This way, a coalgebra might be viewed as having more than one destructor.
+\end{example}
+
+\begin{example}
+    States of an NFA $M$ can be represented as a coinductive algebra as well.
+    To make presentation easier, the destructor has been split into two functions:
+
+    \begin{align}
+        o: Q_M \rightarrow \{0, 1\}\quad &o(q) =
+            \begin{cases}
+                0 & \textbf{if } q \not\in F_M\\
+                1 & \textbf{if } q \in F_M
+            \end{cases}\\
+        t: Q_M \rightarrow {\Powerset{Q_N}} ^{\Sigma_M} \quad & t(q)(a) = \delta_M(q, a)
+    \end{align}
+\end{example}
+
+The usage of destructors instead of constructors requires the use of different proof principles.
+Bisimulations are such a coinductive proof principle that is used to establish
+a notion of \textit{observational equivalence}.
+It compares the behavior of elements of the coinductive algebra,
+i.e., if the destructors yield the same results for both elements, then these elements are concluded
+to be observationally equivalent.
+In the following, the application of this proof principle to automata is demonstrated.
+
+\begin{definition}
+    The greatest bisimulation over the states is the bisimilarity relation $\sim$.
+\end{definition}
+
+\begin{theorem}
+    The bisimilarity relation $\sim$ is an equivalence relation.
+\end{theorem}
+
+\begin{proof}
+    We have to prove the three properties of an equivalence relation:
+    reflexivity, symmetry, and transitivity.
+
+    Reflexivity is easy since obviously for all $s \in Q: s \in F \iff s \in F$
+    Similarly, symmetry of $\iff$ gives us symmetry.
+    Transitivity
+\end{proof}
+
+%\begin{definition}
+%    A relation $R$ between the states of the DFA $M$ is a bisimulation up to $f$
+%    if $f$ is a monotone function and if $R$ satisfies the following properties:
+%
+%    \begin{align}
+%        \forall (p, q) \in R&: p \in F_M \iff q \in F_M \\
+%        \forall (p, q) \in R, a \in \Sigma_M&: (\delta_M(p, a), \delta_M(q, a)) \in f(R)
+%    \end{align}
+%
+%    Monotonicity of $f$ is defined as follows:
+%    \begin{align}
+%        \forall S \in \Powerset{Q \times Q}: S \subseteq f(S)
+%    \end{align}
+%
+%    In the following, $(p, q) \in R$ will be written more succinctly as $p R q$.
+%\end{definition}
+%
+
+%This equivalence relation is based on observable equality.
+%Two states are equivalent under this equivalence relation iff they have the save
+%behaviour, i.e., they accept the same language.
