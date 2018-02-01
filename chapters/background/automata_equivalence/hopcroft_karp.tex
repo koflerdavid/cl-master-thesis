@@ -1,20 +1,54 @@
-Hopcroft and Karp's algorithm takes as input a DFA and a pair of states
-(usually the starting states) and tries to compute a bisimulation
-relating them.
+The following naïve version of Hopcroft and Karp's algorithm
+takes as input a DFA and a pair of states (usually the starting states)
+and tries to compute a bisimulation relating them.
 If it succeeds then the two states are proven to accept the same language.
 If not, then the algorithm terminates and can be made to return a pair
 of states that do not accept the same language.
 
 \begin{definition}
     \begin{align*}
-        \underline{\mathit{Naive(P_1, P_2)}}: &\quad (Q \times Q) \to \{\mathbf{true}, \mathbf{false}\} \\
-        \text{(1) } & R := \emptyset, \mathit{todo} := \{(P_1, P_2)\} \\
+        \underline{\mathit{Naive(p_1, p_2)}}: &\quad (Q \times Q) \to \{\mathbf{true}, \mathbf{false}\} \\
+        \text{(1) } & R := \emptyset, \mathit{todo} := \{(p_1, p_2)\} \\
         \text{(2) } & \text{while } \mathit{todo} \neq \emptyset \text{ do}\\
-        & \text{(2.1)}\quad \mathit{todo} := \mathit{todo} \setminus \{(P', Q')\}\\
-        & \textbf{(2.2)}\quad \textbf{if } \mathbf{(P', Q') \in} \textbf{ R} \textbf{ then goto (2)}\\
-        & \text{(2.3)}\quad \text{if } \text{acc}_N(P') \nLeftrightarrow \text{acc}_N(Q') \text{ then return } \mathbf{false}\\
-        & \text{(2.4)}\quad \mathit{todo} := \mathit{todo} \cup \bigcup_{a \in \Sigma}{(\delta(P', a), \delta(Q', a))}\\
-        & \text{(2.5)}\quad R := R \cup \{(P', Q')\} \\
+        & \text{(2.1)}\quad \mathit{todo} := \mathit{todo} \setminus \{(p', q')\}\\
+        & \textbf{(2.2)}\quad \textbf{if } \mathbf{(p', q') \in} \textbf{ R} \textbf{ then goto (2)}\\
+        & \text{(2.3)}\quad \text{if } o(p') \neq o(q') \text{ then return } \mathbf{false}\\
+        & \text{(2.4)}\quad \mathit{todo} := \mathit{todo} \cup \bigcup_{a \in \Sigma}{(t_a(p'), t_a(q'))}\\
+        & \text{(2.5)}\quad R := R \cup \{(p', q')\} \\
         \text{(3) } & \text{return } \mathbf{true}\\
     \end{align*}
 \end{definition}
+
+A discussion of this algorithm is in order.
+It has to check whether $p_1$ and $p_2$ are equivalent,
+and it does so by starting from an empty bisimulation,
+which represents that nothing is known yet.
+Since this is a coinductive proof principle, equivalence has to be determined according
+to the data returned by the destructors, i.e., whether the states are both accepting or not,
+and whether their state transition functions are equivalent.
+The former is easy to check, the latter involves checking the equivalence of functions.
+Fortunately, functions with finite domain can be compared by checking whether each possible
+input leads to the same output.
+In the present case, this leads to a pair of states for every symbol from the alphabet that has to be compared.
+This is represented by a ``to-do''-list of constraints that has to be checked.
+If the algorithm succeeds to empty this ``to-do''-list, then we have proven the existence of the initial constraint.
+
+For every constraint, the first step is to check whether the bisimulation already contains it
+because only then there is further work to do.
+If the two states are both accepting, or both not accepting, then
+the equivalence depends on the equivalence of the states that can be reached from the present states.
+Therefore, for every input symbol of the automaton, the pair of states reachable using that symbol
+is to be added to the ``to-do'' list.
+Also, the constraint is removed from the ``to-do'' list and added to the bisimulation.
+
+By adding a constraint to the bisimulation, the algorithm risks inserting wrong facts,
+but these will eventually be discovered by processing the ``to-do'' list.
+This manifests by detecting a constraint where one of the states is accepting and the other is not.
+Similar to a broken zipper on a jacket, up to this point the algorithm succeeded in
+relating states of the automaton, until a divergence is encountered.
+On the other hand, if the algorithm manages to turn all constraints in the ``to-do'' list
+into members of the bisimulation, then equivalence has been proven.
+
+\todo{Insert example}
+
+\todo{Insert proof}

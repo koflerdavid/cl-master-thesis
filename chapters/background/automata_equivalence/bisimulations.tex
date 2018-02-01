@@ -108,6 +108,11 @@ while coalgebras \textit{observe} objects~\cite{Jacobs97atutorial}.
             \end{cases}\\
         t: Q_M \rightarrow {\Powerset{Q_N}} ^{\Sigma_M} \quad & t(q)(a) = \delta_M(q, a)
     \end{align}
+
+    Terms like $t(q)(a)$ are also often written as $t_a(q)$.
+    From now on this coalgebraic formulation will be used, i.e.,
+    instead of checking whether a state $q$ is an accepting state,
+    we will check whether its output $o(q)$ is equal to $1$.
 \end{example}
 
 The usage of destructors instead of constructors requires the use of different proof principles.
@@ -119,40 +124,56 @@ to be observationally equivalent.
 In the following, the application of this proof principle to automata is demonstrated.
 
 \begin{definition}
-    The greatest bisimulation over the states is the bisimilarity relation $\sim$.
+    A relation $R$ between the states of the DFA $M$ is a bisimulation
+    iff $R$ satisfies the following properties:
+
+    \begin{align}
+        \forall (p, q) \in R&: o(p) = o(q) \\
+        \forall (p, q) \in R, a \in \Sigma_M&: (t_a(p), t_a(q)) \in R
+    \end{align}
+
+    In the following, $(p, q) \in R$ will be written more succinctly as $p\;R\;q$.
 \end{definition}
 
-\begin{theorem}
-    The bisimilarity relation $\sim$ is an equivalence relation.
-\end{theorem}
+\begin{definition}
+    The greatest bisimulation over the states of an automaton is the bisimilarity relation $\sim$.
+\end{definition}
 
-\begin{proof}
-    We have to prove the three properties of an equivalence relation:
-    reflexivity, symmetry, and transitivity.
+%\begin{theorem}
+%    The bisimilarity relation $\sim$ is an equivalence relation.
+%\end{theorem}
+%
+%\begin{proof}
+%    We have to prove the three properties of an equivalence relation:
+%    reflexivity, symmetry, and transitivity.
+%
+%    Reflexivity is easy since for all $s \in Q: o(s) = o(s)$
+%    Symmetry is also given because for any $p, q \in R$the statement of the second clause of the
+%    definition of bisimulation has to be true for
+%    Transitivity
+%\end{proof}
 
-    Reflexivity is easy since obviously for all $s \in Q: s \in F \iff s \in F$
-    Similarly, symmetry of $\iff$ gives us symmetry.
-    Transitivity
-\end{proof}
+\begin{definition}
+    A relation $R$ between the states of the DFA $M$ is a bisimulation up to $f$
+    if $f$ is a monotone function and if $R$ satisfies the following properties:
 
-%\begin{definition}
-%    A relation $R$ between the states of the DFA $M$ is a bisimulation up to $f$
-%    if $f$ is a monotone function and if $R$ satisfies the following properties:
-%
-%    \begin{align}
-%        \forall (p, q) \in R&: p \in F_M \iff q \in F_M \\
-%        \forall (p, q) \in R, a \in \Sigma_M&: (\delta_M(p, a), \delta_M(q, a)) \in f(R)
-%    \end{align}
-%
-%    Monotonicity of $f$ is defined as follows:
-%    \begin{align}
-%        \forall S \in \Powerset{Q \times Q}: S \subseteq f(S)
-%    \end{align}
-%
-%    In the following, $(p, q) \in R$ will be written more succinctly as $p R q$.
-%\end{definition}
-%
+    \begin{align}
+        \forall (p, q) \in R&: o(p) = o(q) \\
+        \forall (p, q) \in R, a \in \Sigma_M&: (t_a(p), t_a(q)) \in f(R)
+    \end{align}
 
-%This equivalence relation is based on observable equality.
-%Two states are equivalent under this equivalence relation iff they have the save
-%behaviour, i.e., they accept the same language.
+    Monotonicity of $f$ is defined as follows:
+    \begin{align}
+        \forall S \in \Powerset{Q \times Q}: S \subseteq f(S)
+    \end{align}
+\end{definition}
+
+The properties of $f$ ensure that the resulting bisimulation
+is equal to or larger than the original one.
+This is very useful to speed up proof algorithms that work by computing a bisimulation:
+each element of a bisimulation up-to does not only stand for itself,
+but can be used to prove the existence of another element.
+Thus, the computational effort to prove the existence of a certain element
+is reduced in the best case.
+
+The following subsection presents an algorithm that can take advantage of bisimulations up-to.
