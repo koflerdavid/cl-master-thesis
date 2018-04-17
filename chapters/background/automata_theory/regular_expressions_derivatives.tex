@@ -3,15 +3,6 @@ to implement regular expressions in software, and also to convert regular expres
 It can also be extended to other classes of formal languages~\cite{parsing-with-derivatives}.
 The operation has similarities to taking the (partial) derivative of arithmetic expressions.
 
-\begin{definition}
-    The derivative of a regular expression $r$ w.r.t. a letter $c$ is
-    the set of all words in $\Lang{r}$ which start with $c$:
-
-    \begin{align}
-        \forall c \in \Sigma: \Lang{D_c(r)} \coloneqq \{ w \in \Sigma^\ast \mid c w \in \Lang{r} \}
-    \end{align}
-\end{definition}
-
 It is possible to derive regular expressions by using an algorithm which operates on the syntactic level.
 The idea is always the same, but there exist multiple variants of the algorithm.
 These stem from the fact that care has to be taken to simplify intermediary results to ensure termination.
@@ -36,7 +27,7 @@ In the following the variant of the algorithm in~\cite{proof-pearl-regular-expre
 Especially the last rule provides potential for infinitely growing terms.
 Since it is unpleasant to use algorithms which do not terminate,
 these growing terms have to be taken care of.
-This is done by replacing $\cdot$ and $+$ by the operators $\oplus$ and $\odot$
+This is done by replacing $+$ and $\cdot$ with the operators $\oplus$ and $\odot$
 in the right-hand sides of the rules.
 which are defined as follows:
 
@@ -66,23 +57,32 @@ which are defined as follows:
     \end{align}
 \end{definition}
 
-\begin{definition}
-    The derivative can be extended to words by an inductive definition:
+\begin{theorem}
+    The derivative of a regular expression $r$ w.r.t. a letter $c$ is
+    the set of all words in $\Lang{r}$ which start with $c$:
 
     \begin{align}
-        \label{def:derivative_wrt_words}
-        \Lang{D_v(r)} &\coloneqq \{ u \in \Sigma^\ast \mid v u \in \Lang{r} \}
+        \forall c \in \Sigma: \Lang{D_c(r)} \coloneqq \{ w \in \Sigma^\ast \mid c w \in \Lang{r} \}
     \end{align}
-\end{definition}
+\end{theorem}
 
-\begin{theorem}
+\begin{definition}
     The derivative of a regular expression $r$ w.r.t. a word $w$ can be calculated with the following algorithm:
 
     \begin{align}
         D_\epsilon(r) &\rightarrow r \\
         \forall a \in \Sigma, w \in \Sigma^\ast: D_{a w}(r) &\rightarrow D_w(D_a(r))
     \end{align}
-\end{theorem}
+\end{definition}
+
+\begin{definition}
+    The derivative is extended to words by the following definition:
+
+    \begin{align}
+        \label{def:derivative_wrt_words}
+        \Lang{D_v(r)} &\coloneqq \{ u \in \Sigma^\ast \mid v u \in \Lang{r} \}
+    \end{align}
+\end{definition}
 
 \begin{proof}
     We have to prove that both rules compute the right language.

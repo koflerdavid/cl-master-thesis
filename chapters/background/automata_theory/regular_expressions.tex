@@ -1,4 +1,4 @@
-Regular expressions are a formal language that is used to represent languages.
+Regular expressions are used to represent languages.
 Regular expressions are equivalent in expressive power to the DFAs and NFAs presented above,
 but in many cases humans find them more pleasant to work with.
 
@@ -20,8 +20,8 @@ but in many cases humans find them more pleasant to work with.
         $\forall r, s \in R_\Sigma: r + s \in R_\Sigma$.
         \item An application of the postfix operator $\ast$ to a regular expression is a regular expression:
         $\forall r \in R_\Sigma: r^\ast \in R_\Sigma$.
-        \item A regular expression, surrounded by $()$, is a regular expression:
-        $\forall r \in R_\Sigma: (r) \in R_\Sigma$.
+        \item A regular expression, surrounded by $\bm{(}\bm{)}$, is a regular expression:
+        $\forall r \in R_\Sigma: \bm{(}r\bm{)} \in R_\Sigma$.
     \end{itemize}
 \end{definition}
 
@@ -36,5 +36,6 @@ As with every formal language, a semantics is required for regular expressions t
         \item $\forall r, s \in R_\Sigma: \Lang{r \cdot s} \coloneqq \Lang{r} \Lang{s}$
         \item $\forall r, s \in R_\Sigma: \Lang{r + s} \coloneqq \Lang{r} \cup \Lang{s}$
         \item $\forall r \in R_\Sigma: \Lang{r^\ast} \coloneqq \Lang{r}^\ast$
+        \item $\forall r \in R_\Sigma: \Lang{\bm{(}r^\ast\bm{)}} \coloneqq \Lang{r}^\ast$
     \end{itemize}
 \end{definition}

@@ -7,7 +7,7 @@ as graphs with labeled vertices and edges.
     \begin{itemize}
         \item A set of vertices $Q_N$, called states.
             As implied by the term NFA, this set has to be finite.
-        \item A set of labels $\Sigma_N$ on the vertices,
+        \item A set of labels $\Sigma_N$ on the edges,
             which is called the alphabet of input symbols.
             It has to be finite as well.
         \item A set of vertices called initial states $S_N \subseteq Q_N$.
@@ -16,16 +16,16 @@ as graphs with labeled vertices and edges.
             Each transition is labelled with one input symbol.
             This set can be represented by a total function
             $\Delta_N : Q_N \times \Sigma_N \rightarrow \Powerset{Q_N}$
-            that associates a set of successor states to every pair of states and input symbols.
+            that associates a set of successor states to every pair of state and input symbol.
     \end{itemize}
 \end{definition}
 
 Finite automata are often used to describe transition systems.
-A system modeled by an automaton is thought as
+A system modeled by an automaton is thought of as
 always being in one of the states contained in the automaton.
 When the system receives an input, a transition to another state is made.
 
-For certain classes of languages, a NFA can be used to decide
+For certain classes of languages, an NFA can be used to decide
 whether a specific word $w$ is contained in a language $L$.
 This is done by first constructing an appropriate automaton $M$ for the language.
 Then, the transition system is initialized to be at one of the initial states $s \in S_M$.
@@ -38,7 +38,7 @@ then the automaton is said to accept the input.
 \begin{definition}
     The set of words accepted by starting from a set of states $P$
     is said to be the language of $P$.
-    The language accepted by the set of initial states of an automata $M$ is the language of $M$.
+    The language accepted by the set of initial states of an automata $M$ is the language of $M$:
 
     \begin{align}
         \Lang{P} &= \{ w \in \Sigma^\ast \mid \hat\Delta_M(P, w) \cap F_M \neq \{ \} \}\\

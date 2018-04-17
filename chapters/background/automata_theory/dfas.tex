@@ -1,5 +1,5 @@
-Deterministic finite automata (DFAs) are a subset of NFAs.
-There are two major differences: There can only be one initial state.
+There are two major differences between deterministic finite automata (DFAs) and NFAs .
+Firstly, there can only be one initial state.
 Also, for every state state and input symbol there
 has to be exactly one transition to a successor state.
 These two properties make DFAs significantly easier to describe and to handle.
@@ -59,13 +59,13 @@ The following theorem makes this transformation explicit:
 
     In particular
     \begin{align}
-        \forall S \subseteq Q_N, w \in \Sigma&ast: \hat\delta(S, w) = \hat\Delta(S, w)
+        \forall S \subseteq Q_N, w \in \Sigma^\ast: \hat\delta(S, w) = \hat\Delta(S, w)
     \end{align}
 \end{theorem}
 
 The disadvantage of this transformation is that
 in general the generated DFA has exponentially more states
-than the original NFA since $|Q_D| = |\Powerset{Q_N} = 2^{|Q_N|}$.
+than the original NFA since $|Q_D| = |\Powerset{Q_N}| = 2^{|Q_N|}$.
 In many cases it is possible to reduce this amount by either pruning states
 that are not reachable from starting states,
 or by not even computing them in the first place.

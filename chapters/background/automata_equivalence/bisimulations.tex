@@ -10,8 +10,7 @@
     this is described as $f \circ g : A \rightarrow C$.
 
     The identity morphism must behave as a neutral element regarding composition, i.e.,
-    the composition of any morphism of a given category with an identity morphism
-    must behave as the original morphism.
+    if $f : A \rightarrow B$ then $id_B \circ f = f \circ id_A = f$.
 \end{definition}
 
 \begin{example}
@@ -26,13 +25,14 @@
     can be turned into a category with the set $V$ as objects
     using the \textit{Free Category} construction.
     To fulfil the category laws, its morphisms are drawn from
-    the smallest superset $E'$ of $E$ fulfilling the following conditions:
+    the \textit{paths} inside the graph:
 
     \begin{itemize}
-        \item There shall be an edge from every vertex $v \in V$ to itself.
-        \item For every pair of edges $e, f \in E$ and vertices $u, v, w \in V$,
-              where $e$ leads from $v$ to $w$ and $f$ from $u$ to $v$,
-              there shall be an edge $e \circ f$ from $u$ to $w$.
+        \item There is a path from every vertex $v \in V$ to itself.
+        \item For all vertices $u, v, w \in V$,
+              every path $p$ from $u$ to $v$,
+              and all edges $e \in E$ from $v$ to $w$,
+              there is a path $q$ from $u$ to $w$.
     \end{itemize}
 \end{example}
 
@@ -45,8 +45,8 @@
     \begin{itemize}
         \item For every morphism $f$ and $g$ from $A$, $F (g \circ f)$
               must be equivalent to $F g \circ F f$.
-        \item The identity morphism of an object $a$ from $A$, $F id_a $,
-              must be lifted to $id_{F_a}$, the identity morphism of $F a$.
+        \item The identity morphism of an object $a$ from $A$, $F(id_{a}) $,
+              must be lifted to $id_{F(a)}$, the identity morphism of $F(a)$.
     \end{itemize}
 
     Functors that map a category to itself are called \textit{endofunctors}.
@@ -63,6 +63,12 @@ Algebras are mathematical objects that are equipped with some \textit{constructo
 A constructor is a function that makes it possible to generate elements of
 the carrier algebra\footnote{In the abstract definition, these are combined into a single
 constructor by using the disjoint union of functions}, often from existing ones.
+
+\begin{definition}
+    Given two functions $a : F \rightarrow G$ and $b : F' \rightarrow G$,
+    $[a, b] : (F \sqcup F') \rightarrow G$ maps
+
+\end{definition}
 
 \begin{example}
     In the category \textbf{Set}, the function
@@ -172,7 +178,7 @@ The properties of $f$ ensure that the resulting bisimulation
 is equal to or larger than the original one.
 This is very useful to speed up proof algorithms that work by computing a bisimulation:
 each element of a bisimulation up-to does not only stand for itself,
-but can be used to prove the existence of another element.
+but can be used to prove the existence of other elements.
 Thus, the computational effort to prove the existence of a certain element
 is reduced in the best case.
 

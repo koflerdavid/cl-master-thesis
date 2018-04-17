@@ -2,26 +2,77 @@
     The set of all finite sequences of an alphabet $\Sigma$ is written as $\Sigma^\ast$.
     It is formally defined as
     \begin{align}
-        \Sigma^\ast = \bigcup\limits_{n=0}^\infty \{c_1 c_2 \ldots c_n \mid \forall 1 \le i \le n: c_i \in \Sigma \}
+        \Sigma^\ast = \bigcup\limits_{n=0}^\infty \{c_1 c_2 \ldots c_n \mid c_i \in \Sigma \text{ for all } 1 \le i \le n \}
     \end{align}
     Subsets of $\Sigma^\ast$ are often called languages.
 \end{definition}
 
-The empty sequence (containing no symbols at a all) is denoted by $\epsilon$.
+The empty sequence (containing no symbols at all) is denoted by $\epsilon$.
+
+\begin{definition}
+    A \textit{Kleene algebra} is a set $A$ together with:
+    \begin{itemize}
+        \item Two designated elements $0$ and $1$
+        \item Two binary operations $+, \cdot : A \rightarrow A$.
+        \item A unary operation $(-)^\ast : A \rightarrow A$, also called \textit{asterate} or \textit{Kleene star}.
+    \end{itemize}
+
+    For all $a, b, c \in A$, the following axioms must hold:
+
+    \begin{itemize}
+        \item The operations $+$ and $\cdot$ must be associative:
+            \begin{align}
+                a \cdot (b \cdot c) &= (a \cdot b) \cdot c\\
+                a + (b + c) &= (a + b) + c
+            \end{align}
+
+        \item $+$ must be commutative, idempotent, and distributive over $\cdot$:
+            \begin{align}
+                a + b &= b + a\\
+                a + a &= a\\
+                (a + b) \cdot c &= a \cdot c + b \cdot c
+            \end{align}
+
+        \item $0$ and $1$ are neutral elements for $+$ and $\cdot$, respectively;
+            $0$ must be the annihilating element of $\cdot$:
+            \begin{align}
+                a + 0 &= a\\
+                a \cdot 1 &= 1 \cdot a = a\\
+                a \cdot 0 &= 0 \cdot a = 0
+            \end{align}
+
+        \item Given the partial order defined by $a + b = b \Rightarrow a \leq b$,
+            the operation $\ast$ must behave as follows:
+            \begin{align}
+                1 + a \cdot a^\ast = 1 + a^\ast = a^\ast\\
+                b + a \cdot c \leq c \Rightarrow a^\ast \cdot b \leq c\\
+                b + c \cdot a \leq c \Rightarrow b \cdot a^\ast \leq c
+            \end{align}
+
+    \end{itemize}
+
+\end{definition}
+
+\begin{theorem}
+    The simplest example are Boolean Algebras with $\vee$ for $+$, $\wedge$ for $\cdot$,
+    and with the constant function $\mathbf{1}$ for $\ast$.
+\end{theorem}
 
 \begin{theorem}
     Languages form a Kleene algebra with the following definitions:
     \begin{itemize}
-        \item The empty set $\{\}$ for $0$
-        \item The language $\{ \epsilon \}$ for $1$
-        \item Set union for $+$
+        \item The empty set $\emptyset$ for $0$.
+        \item The language $\{ \epsilon \}$ for $1$.
+        \item Set union for $+$.
         \item Language concatenation for $\times$, which is defined as follows:
             \begin{align}
-                L_1 L_2 \coloneqq \{ v w \mid v \in L_1, w \in w \}
+                L_1 L_2 \coloneqq \{ v w \mid v \in L_1, w \in L_2 \}
             \end{align}
         \item Asterate for languages is defined as follows:
             \begin{align}
-                L^\ast \coloneqq \bigcup\limits_{i = 0}^\infty L^i
+                L^0 &\coloneqq \{\epsilon\} \\
+                L^n &\coloneqq L L^{n-1} \\
+                L^\ast &\coloneqq \bigcup\limits_{i = 0}^\infty L^i,
             \end{align}
     \end{itemize}
 \end{theorem}
